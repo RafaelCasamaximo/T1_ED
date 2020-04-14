@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "geo.h"
+#include "read.h"
 
 int main(int argc, char* argv[]){
     int i = 1;
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
                 printf("\n '-e' sem diretorio.");
                 exit(1);
             }
-            printf(" O caminho existe. (%s)\n",argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
             entryPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(entryPath,argv[i]);
         }
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
                 printf("\n'-f' sem arquivo");
                 exit(1);
             }
-            printf(" O caminho existe. (%s)\n",argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
             geoPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(geoPath,argv[i]);
         }
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
                 printf("\n'-q' sem arquivo");
                 exit(1);
             }
-            printf(" O caminho existe. (%s)\n",argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
             queryPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(queryPath,argv[i]);
         }
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]){
                 printf("\n'-o' sem diretorio");
                 exit(1);
             }
-            printf(" O caminho existe. (%s)\n",argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
             outPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
             strcpy(outPath,argv[i]);
             
@@ -78,7 +78,11 @@ int main(int argc, char* argv[]){
 
     if(geoPath == NULL || outPath == NULL){
         printf("\n!Erro! Nao existe -f ou -o. Esses parâmetros são essenciais.");
+        exit(1);
     }
+
+    leGeo(entryPath, geoPath);
+
 
     return 0;
 }

@@ -40,3 +40,4 @@ main.o: main.c $(H_SOURCE)
 
 clean:
 		rm -rf *.o $(PROJ_NAME) *~
+		
