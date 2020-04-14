@@ -3,9 +3,12 @@
 #include <string.h>
 
 #include "read.h"
+#include "list.h"
 
 int main(int argc, char* argv[]){
     int i = 1;
+
+    No* lista = NULL;
 
     char* entryPath = NULL;
     char* geoPath = NULL;
@@ -81,7 +84,8 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-    leGeo(entryPath, geoPath);
+    lista = leGeo(entryPath, geoPath, lista);
+    
 
 
     return 0;

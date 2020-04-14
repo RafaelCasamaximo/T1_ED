@@ -2,7 +2,8 @@
 #ifndef read_H_
 #define read_H_
 
+#include "list.h"
 
-void leGeo(char entryPath[], char geoPath[]);
+No* leGeo(char entryPath[], char geoPath[], No* inicio);
 
 #endif

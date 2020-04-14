@@ -1,4 +1,5 @@
-nx 20
+nx 5
+t 0 0.000000 0.000000 blue cyan hino-01
 c 1 2.500000 22.000000 10.000000 black dimgray
 c 2 2.500000 28.000000 10.000000 black dimgray
 c 3 2.500000 34.000000 10.000000 black dimgray

@@ -3,8 +3,9 @@
 #include <string.h>
 
 #include "read.h"
+#include "list.h"
 
-void leGeo(char entryPath[], char geoPath[]){
+No* leGeo(char entryPath[], char geoPath[], No* inicio){
 
     //Abrindo o arquivo e concatenando, caso necessário
     FILE* fGeo = NULL;
@@ -29,9 +30,9 @@ void leGeo(char entryPath[], char geoPath[]){
 
     //Lendo comandos
     //nx, c, r, t;
-    char comando[3], corb[22], corp[22];
+    char comando[3], corb[22], corp[22], buffer;
     char* texto = NULL;
-    int numMax = 1000, id;
+    int numMax = 1000, id, buffersize = 0;
     float r, x, y, w, h;
     
     int i = 0;
@@ -46,16 +47,35 @@ void leGeo(char entryPath[], char geoPath[]){
         }
         else if(strcmp(comando, "c") == 0){
             fscanf(fGeo, "%d %f %f %f %s %s", &id, &r, &x, &y, corb, corp);
+            inicio = addElem(inicio, id, 'c');
+            inicio = addC(inicio, id, r, x, y, corb, corp);
         }
         else if(strcmp(comando, "r") == 0){
             fscanf(fGeo, "%d %f %f %f %f %s %s", &id, &w, &h, &x, &y, corb, corp);
+            inicio = addElem(inicio, id, 'r');
         }
         else if(strcmp(comando, "t") == 0){
-            //mais tarde com alocação dinamica
+            fscanf(fGeo, "%d %f %f %s %s", &id, &x, &y, corb, corp);
+            buffer = getc(fGeo);
+            while(buffer != '\n' && buffer != EOF){
+            buffer = getc(fGeo);
+            buffersize++;
+            }
+            fseek(fGeo, -buffersize, SEEK_CUR);
+            texto = (char*)malloc(sizeof(char) * buffersize);
+            fscanf(fGeo, "%[^\n]s", texto);
+            inicio = addElem(inicio, id, 't');
+            inicio = addT(inicio, id, texto, x, y, corb, corp, buffersize);
         }
         i++;
     }
 
+    inicio = imprimeLista(inicio);
+
+
+
     fclose(fGeo);
     printf("\n---Arquivo .geo fechado---");
+
+    return inicio;
 }
