@@ -7,10 +7,6 @@
 
 No* pegaDadosGeo(No* lista, char* dirEntrada){
 
-    printf("\n-----%d", lista);
-
-    lista = imprimeLista(lista);
-
     printf("\nO caminho passado para pegaDadosGeo é: %s", dirEntrada);
     FILE* arqGeo = fopen(dirEntrada, "r");
     if(arqGeo == NULL){
@@ -21,13 +17,12 @@ No* pegaDadosGeo(No* lista, char* dirEntrada){
 
     int numMax = 1000;
     char comando[3];
-    int i = 0;
-    int id;
+    int i = 0, id, bufferSize = 0;
 	float x, y, w, h, r;
-	char cb[20], cp[20];
+	char cb[20], cp[20], buffer;
+    char* txt = NULL;
 
     while(i <= numMax){
-        printf("\n-----%d", lista);
         fscanf(arqGeo, "%s", comando);
 
         if(feof(arqGeo)){
@@ -49,13 +44,32 @@ No* pegaDadosGeo(No* lista, char* dirEntrada){
             addR(lista, id, w, h, x, y, cb, cp);
         }
         else if(strcmp("t", comando) == 0){
-            //fscanf(arqGeo, "", );
+            //t i x y cb cp txt
+            fscanf(arqGeo, "%d %f %f %s %s", &id, &x, &y, cb, cp);
+            buffer = getc(arqGeo);
+            while(!feof(arqGeo) && buffer != '\n'){ 
+                buffer = getc(arqGeo);
+                bufferSize++;
+            }
+            bufferSize++;
+            fseek(arqGeo, -bufferSize, SEEK_CUR);
+            buffer = getc(arqGeo);
+            txt = (char *)malloc(sizeof(char) * (bufferSize + 1));
+            if(txt == NULL){
+                printf("ERRO! Não foi possivel alocar memória!");
+                exit(1);
+            }
+            fscanf(arqGeo, "%[^\n]s", txt);
+            lista = addElem(lista, id, 't');
+            lista = addT(lista, id, txt, x, y, cb, cp, bufferSize);
+            bufferSize = 0;
+            free(txt);
         }
         i++;
     }
 
     fclose(arqGeo);
-    free(dirEntrada);
-    printf("\n***Arquivo Geo foi fechado***\n");
+    printf("\n***Arquivo Geo foi fechado***\n***A leitura foi concluida***\n");
     lista = imprimeLista(lista);
+    return lista;
 }

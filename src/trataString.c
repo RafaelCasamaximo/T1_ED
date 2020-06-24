@@ -1,77 +1,80 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "trataString.h"
 
-char *concatenaCaminhos(char e[], char f[])
+void concatenaCaminhos(char e[], char f[], char** result)
 {
+    printf("\ne[] -> %s\n", e);
+    printf("\nf[] -> %s\n", f);
 
-    printf("E -> %s", e);
-    printf("\nE -> %s\n", f);
+    int tamanhoString = (e == NULL) ? (strlen(f) + 1) : (strlen(e) + strlen(f) + 1);
+    if(e == NULL){
+        *result = malloc(tamanhoString);
+        strcpy(*result, f);
+        return;
+    }
 
-    //Tamanho base definido
-    int tamanhoE = strlen(e);
-    int tamanhoF = strlen(f);
-    int tamanhoResultado = tamanhoE + tamanhoF + 1;
-    char *concat = NULL;
-    //Condicionais
-    //-e = * e -f = *
-    if (e[tamanhoE - 1] != '/' && (f[0] != '/' && f[0] != '.'))
-    {
-        tamanhoResultado += 1;
-        concat = (char *)malloc(sizeof(char) * tamanhoResultado);
-        strcat(concat, e);
-        strcat(concat, "/");
-        strcat(concat, f);
-        strcat(concat, "\0");
+    int tamE = strlen(e);
+    int tamF = strlen(f);
+
+    //* v *
+    if(e[tamE - 1] != '/' && (f[0] != '/' && f[0] != '.')){
+        tamanhoString++;
+        *result = malloc(tamanhoString);
+        strcpy(*result, e);
+        strcat(*result, "/");
+        strcat(*result, f);
     }
-    else if (e[tamanhoE - 1] == '/' && (f[0] != '/' && f[0] != '.'))
-    {
-        concat = (char *)malloc(sizeof(char) * tamanhoResultado);
-        strcat(concat, e);
-        strcat(concat, f);
-        strcat(concat, "\0");
+    else if((e[tamE - 1] == '/' && (f[0] != '/' && f[0] != '.')) || (e[tamE - 1] != '/' && f[0] == '/')){
+        *result = malloc(tamanhoString);
+        strcpy(*result, e);
+        strcat(*result, f);
     }
-    else if (e[tamanhoE - 1] == '/' && f[0] == '/')
-    {
-        tamanhoResultado -= 1;
-        concat = (char *)malloc(sizeof(char) * tamanhoResultado);
-        concat = strtok(e, "/");
-        strcat(concat, f);
-        strcat(concat, "\0");
+    else if(e[tamE - 1] == '/' && f[0] == '/'){
+        tamanhoString--;
+        *result = malloc(tamanhoString);
+        strcpy(*result, e);
+        strncat(*result, f + 1, tamF -1);
     }
-    else if (e[tamanhoE - 1] == '/' && f[0] == '.')
-    {
-        tamanhoResultado -= 2;
-        concat = (char *)malloc(sizeof(char) * tamanhoResultado);
-        concat = strtok(e, "/");
-        f = &f[1];
-        strcat(concat, f);
-        strcat(concat, "\0");
+    else if(e[tamE - 1] == '/' && f[0] == '.'){
+        tamanhoString -= 2;
+        *result = malloc(tamanhoString);
+        strcpy(*result, e);
+        strncat(*result, f + 2, tamF -1);
     }
-    printf("Caminho concatenado para abrir o .GEO: \"%s\"", concat);
-    return concat;
+    else{
+        printf("\nERRO! O formato que você inseriu no parâmetro -f e -e não se encaixam no contexto.\n Verifique o caminho que você inseriu!\n");
+        exit(1);
+    }
+
 }
 
-char *getNomeConcatExtension(char f[], char ext[])
-{
-    int tamanhoString = 0;
-    char *concat = NULL;
-    if (f[0] == '.')
-    {
-        f = &f[1];
-    }
-    f = strtok(f, ".");
-    if (f[0] == '/')
-    {
-        f = strrchr(f, '/');
-        f = &f[1];
-    }
 
-    tamanhoString += strlen(f) + strlen(ext);
-    concat = (char *)malloc(sizeof(char) * tamanhoString);
-    strcpy(concat, f);
-    strcat(concat, ext);
-    return concat;
+
+void getNomeConcatExtension(char f[], char ext[], char** result){
+    printf("\nRetirando o nome do arquivo da sentença: \"%s\"\n", f);
+    printf("Concatenando o nome do arquivo com: \"%s\"\n", ext);
+    char* aux = NULL;
+    int tamF = strlen(f);
+    //Encontra pos do último / no f
+    if(f[0] == '.'){
+        aux = strtok(f + 1, ".");
+    }
+    aux = strtok(f, ".");
+    bool temBarra = false;
+    for(int i = 0; i < (tamF - 1); i++){
+        if(f[i] == '/'){
+            temBarra = true;
+        }
+    }
+    if(temBarra){
+        aux = strrchr(f, '/') + 1;
+    }
+    printf("\n%s\n", aux);
+    *result = malloc(strlen(aux) + strlen(ext) + 1);
+    strcpy(*result, aux);
+    strcat(*result, ext);
 }

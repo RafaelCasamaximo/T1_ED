@@ -5,26 +5,35 @@
 #include "list.h"
 
 No* addElem(No* inicio, int id, char tipo){
-    if(!inicio){
+    if(inicio == NULL){
         inicio = (No*)malloc(sizeof(No));
+        if(inicio == NULL){
+            printf("ERRO! Não foi possivel adicionar um elemento na lista!");
+            exit(1);
+        }
         inicio->id = id;
         inicio->tipo = tipo;
         inicio->fig = NULL;
         inicio->prox = NULL;
         printf("\nElemento adicionado como sucesso (ID: %d TIPO: %c)", inicio->id, inicio->tipo);
-        return inicio;
     }
-    No* aux = inicio;
-    while(aux->prox != NULL){
+    else{
+        No* aux = inicio;
+        while(aux->prox != NULL){
+            aux = aux->prox;
+        }
+        aux->prox = (No*)malloc(sizeof(No));
+        if(inicio == NULL){
+            printf("ERRO! Não foi possivel adicionar um elemento na lista!");
+            exit(1);
+        }
         aux = aux->prox;
+        aux->id = id;
+        aux->tipo = tipo;
+        aux->fig = NULL;
+        aux->prox = NULL;
+        printf("\nElemento adicionado como sucesso (ID: %d TIPO: %c)", aux->id, aux->tipo);
     }
-    aux->prox = (No*)malloc(sizeof(No));
-    aux = aux->prox;
-    aux->fig = NULL;
-    aux->id = id;
-    aux->tipo = tipo;
-    aux->prox = NULL;
-    printf("\nElemento adicionado como sucesso (ID: %d TIPO: %c)", aux->id, aux->tipo);
     return inicio;
 }
 
@@ -106,6 +115,6 @@ No* addT(No* inicio, int id, char texto[], float x, float y, char corb[], char c
     strcpy(aux->fig->t.texto, texto);
     strcpy(aux->fig->t.corb, corb);
     strcpy(aux->fig->t.corp, corp);
-    printf("\nForma Tipo: \'t\' adicionada com sucesso.\nt: \'%s\' x: %f y: %f\ncorb: %s corp: %s", aux->fig->t.texto, aux->fig->t.x, aux->fig->t.y, aux->fig->r.corb, aux->fig->r.corp);
+    printf("\nForma Tipo: \'t\' adicionada com sucesso.\nt: \'%s\' x: %f y: %f\ncorb: %s corp: %s", aux->fig->t.texto, aux->fig->t.x, aux->fig->t.y, aux->fig->t.corb, aux->fig->t.corp);
     return inicio;
 }

@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     char *queryPath = NULL;
     char *outPath = NULL;
     char *caminhoConcatenado = NULL;
+    char *nomeArquivo = NULL;
 
     //Lê os argumentos passados para o executável
     while (i < argc){
@@ -91,25 +92,20 @@ int main(int argc, char *argv[])
     }
 
     //Se ele chegar até aqui significa que existe os parametros essenciais.
-    //Trata string
-    //Ler o arquivo .geo
 
-    caminhoConcatenado = concatenaCaminhos(entryPath, geoPath);
+    concatenaCaminhos(entryPath, geoPath, &caminhoConcatenado);
+    getNomeConcatExtension(geoPath, ".svg", &nomeArquivo);
 
-    printf("\n-----%d", lista);
-
-    if(entryPath == NULL){
-        lista = pegaDadosGeo(lista, geoPath);
-    }
-    else{
-        lista = pegaDadosGeo(lista, caminhoConcatenado);
-    }
-
+    lista = pegaDadosGeo(lista, caminhoConcatenado);
+    
     free(entryPath);
     free(geoPath);
     free(queryPath);
     free(outPath);
     free(caminhoConcatenado);
+    if(nomeArquivo != NULL){
+       free(nomeArquivo); 
+    }
 
 
     return 0;
