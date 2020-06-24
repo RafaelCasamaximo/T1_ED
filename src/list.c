@@ -7,9 +7,9 @@
 No* addElem(No* inicio, int id, char tipo){
     if(!inicio){
         inicio = (No*)malloc(sizeof(No));
-        inicio->fig = NULL;
         inicio->id = id;
         inicio->tipo = tipo;
+        inicio->fig = NULL;
         inicio->prox = NULL;
         printf("\nElemento adicionado como sucesso (ID: %d TIPO: %c)", inicio->id, inicio->tipo);
         return inicio;
@@ -43,17 +43,20 @@ No* buscaElem(No* inicio, int id){
     No *aux = inicio;
     while(aux != NULL){
         if(id == aux->id){
-            printf("\nRetornando elemento de ID: %d ", id);
+            printf("\n\nRetornando elemento de ID: %d", id);
             return aux;
         }
         aux = aux->prox;
     }
-    printf("\nNão foi possivel encontrar o elemento de ID: %d", id);
+    printf("\nNão foi possivel encontrar o elemento de ID: %d. Retornando NULL\n\n", id);
     return NULL;
 }
 
 No* addC(No* inicio, int id, float r, float x, float y, char corb[], char corp[]){
     No* aux = buscaElem(inicio, id);
+    if(aux == NULL){
+        return inicio;
+    }
     aux->fig = (Fig*)malloc(sizeof(Fig));
     if(aux->fig == NULL){
         printf("Não foi possivel alocar memória para a figura. Encerrando programa");

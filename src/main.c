@@ -2,90 +2,114 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "read.h"
 #include "list.h"
+#include "trataString.h"
+#include "leituraGeo.h"
 
-int main(int argc, char* argv[]){
+int main(int argc, char *argv[])
+{
     int i = 1;
 
     No* lista = NULL;
 
-    char* entryPath = NULL;
-    char* geoPath = NULL;
-    char* queryPath = NULL;
-    char* outPath = NULL;
+    char *entryPath = NULL;
+    char *geoPath = NULL;
+    char *queryPath = NULL;
+    char *outPath = NULL;
+    char *caminhoConcatenado = NULL;
 
     //Lê os argumentos passados para o executável
-    while(i < argc){
+    while (i < argc){
         //siguel [-e path] -f arq.geo [-q consulta.qry] -o dir
         printf("(%d) -> %s", i, argv[i]);
 
         //Vê se o usuário inseriu um parametro para especificar o local da entrada de arquivos
-        if (strcmp("-e",argv[i])==0){
+        if (strcmp("-e", argv[i]) == 0){
             i++;
 
-            if (argv[i] == NULL){ //Encerra o programa se '-e' não for seguido do local do arquivo.
+            if (argv[i] == NULL)
+            { //Encerra o programa se '-e' não for seguido do local do arquivo.
                 printf("\n!Erro! Sem parametros em -e");
                 printf("\n '-e' sem diretorio.");
                 exit(1);
             }
-            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
-            entryPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
-            strcpy(entryPath,argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n", argv[i]);
+            entryPath = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(entryPath, argv[i]);
         }
 
         //Vê se o usuário inseriu um parametro para especificar o arquivo da geografia
-        else if (strcmp("-f",argv[i])==0){
+        else if (strcmp("-f", argv[i]) == 0){
             i++;
 
-            if (argv[i] == NULL){ //Encerra o programa se '-f' não for seguido do local do arquivo.
+            if (argv[i] == NULL){
+                //Encerra o programa se '-f' não for seguido do local do arquivo.
                 printf("\n!Erro! Sem parametros em -f");
                 printf("\n'-f' sem arquivo");
                 exit(1);
             }
-            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
-            geoPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
-            strcpy(geoPath,argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n", argv[i]);
+            geoPath = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(geoPath, argv[i]);
         }
 
         //Vê se o usuário inseriu um parametro para especificar o arquivo de consulta
-        else if (strcmp("-q",argv[i])==0){
+        else if (strcmp("-q", argv[i]) == 0){
             i++;
 
-            if (argv[i] == NULL){ //Encerra o programa se '-q' não for seguido do local do arquivo.
+            if (argv[i] == NULL){
+                //Encerra o programa se '-q' não for seguido do local do arquivo.
                 printf("\n!Erro! Sem parametros em -q");
                 printf("\n'-q' sem arquivo");
                 exit(1);
             }
-            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
-            queryPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
-            strcpy(queryPath,argv[i]);
+            printf(" O parâmetro foi inserido. (%s)\n", argv[i]);
+            queryPath = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(queryPath, argv[i]);
         }
 
         //Vê se o usuário inseriu um parametro para especificar o local dos arquivos de saída
-        else if (strcmp("-o",argv[i])==0){
+        else if (strcmp("-o", argv[i]) == 0){
             i++;
 
-            if (argv[i] == NULL){ //Encerra o programa se '-o' não for seguido do diretorio.
+            if (argv[i] == NULL){
+                //Encerra o programa se '-o' não for seguido do diretorio.
                 printf("\n!Erro! Sem parametros em -o");
                 printf("\n'-o' sem diretorio");
                 exit(1);
             }
-            printf(" O parâmetro foi inserido. (%s)\n",argv[i]);
-            outPath = (char *)malloc((strlen(argv[i])+1)*sizeof(char));
-            strcpy(outPath,argv[i]);
-            
+            printf(" O parâmetro foi inserido. (%s)\n", argv[i]);
+            outPath = (char *)malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(outPath, argv[i]);
         }
         i++;
     }
 
-    if(geoPath == NULL || outPath == NULL){
+    if (geoPath == NULL || outPath == NULL){
         printf("\n!Erro! Nao existe -f ou -o. Esses parâmetros são essenciais.");
         exit(1);
     }
 
-    lista = leGeo(entryPath, geoPath, lista);
-    
+    //Se ele chegar até aqui significa que existe os parametros essenciais.
+    //Trata string
+    //Ler o arquivo .geo
+
+    caminhoConcatenado = concatenaCaminhos(entryPath, geoPath);
+
+    printf("\n-----%d", lista);
+
+    if(entryPath == NULL){
+        lista = pegaDadosGeo(lista, geoPath);
+    }
+    else{
+        lista = pegaDadosGeo(lista, caminhoConcatenado);
+    }
+
+    free(entryPath);
+    free(geoPath);
+    free(queryPath);
+    free(outPath);
+    free(caminhoConcatenado);
 
 
     return 0;
