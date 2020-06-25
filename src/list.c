@@ -118,3 +118,18 @@ No* addT(No* inicio, int id, char texto[], float x, float y, char corb[], char c
     printf("\nForma Tipo: \'t\' adicionada com sucesso.\nt: \'%s\' x: %f y: %f\ncorb: %s corp: %s", aux->fig->t.texto, aux->fig->t.x, aux->fig->t.y, aux->fig->t.corb, aux->fig->t.corp);
     return inicio;
 }
+
+No* delLista(No* inicio){
+    No* aux = NULL;
+    while(inicio != NULL){
+        aux = inicio;
+        inicio = inicio->prox;
+        if(aux->tipo == 't'){
+            free(aux->fig->t.texto);
+        }
+        free(aux->fig);
+        free(aux);
+    }
+    printf("\n---Lista deletada com sucesso---\n");
+    return inicio;
+}

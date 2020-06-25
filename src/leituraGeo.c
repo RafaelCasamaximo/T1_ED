@@ -41,6 +41,7 @@ No* pegaDadosGeo(No* lista, char* dirEntrada){
         else if(strcmp("r", comando) == 0){
             fscanf(arqGeo, "%d %f %f %f %f %s %s", &id, &x, &y, &w, &h, cb, cp);
             lista = addElem(lista, id, 'r');
+            condicionaRetangulo(&x, &y, &w, &h);
             addR(lista, id, w, h, x, y, cb, cp);
         }
         else if(strcmp("t", comando) == 0){

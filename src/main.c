@@ -5,18 +5,22 @@
 #include "list.h"
 #include "trataString.h"
 #include "leituraGeo.h"
+#include "desenhaSvg.h"
 
 int main(int argc, char *argv[])
 {
     int i = 1;
 
     No* lista = NULL;
+    No* listaQry = NULL;
 
     char *entryPath = NULL;
     char *geoPath = NULL;
     char *queryPath = NULL;
     char *outPath = NULL;
     char *caminhoConcatenado = NULL;
+    char *caminhoConcatenadoSaida = NULL;
+    char *caminhoConcatenadoQuery = NULL;
     char *nomeArquivo = NULL;
 
     //Lê os argumentos passados para o executável
@@ -92,12 +96,19 @@ int main(int argc, char *argv[])
     }
 
     //Se ele chegar até aqui significa que existe os parametros essenciais.
-
+    //Le o .geo e monta uma lista com ele
     concatenaCaminhos(entryPath, geoPath, &caminhoConcatenado);
-    getNomeConcatExtension(geoPath, ".svg", &nomeArquivo);
-
     lista = pegaDadosGeo(lista, caminhoConcatenado);
+
+    //Constroi o svg com base na lista feita na func anteiror
+    getNomeConcatExtension(geoPath, ".svg", &nomeArquivo);
+    concatenaCaminhos(outPath, nomeArquivo, &caminhoConcatenadoSaida);
+    lista = desenhaSvg(lista, caminhoConcatenadoSaida);
     
+    getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
+    listaQry = 
+
+
     free(entryPath);
     free(geoPath);
     free(queryPath);
@@ -106,7 +117,14 @@ int main(int argc, char *argv[])
     if(nomeArquivo != NULL){
        free(nomeArquivo); 
     }
+    if(caminhoConcatenadoSaida != NULL){
+        free(caminhoConcatenadoSaida);
+    }
+    if(caminhoConcatenadoQuery != NULL){
+        free(caminhoConcatenadoQuery);
+    }
 
+    lista = delLista(lista);
 
     return 0;
 }
