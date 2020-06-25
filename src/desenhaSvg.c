@@ -12,7 +12,7 @@ No* desenhaSvg(No* lista, char* caminho){
         printf("\nERRO! Não foi possivel abrir o arquivo!\n");
         exit(1);
     }
-
+    printf("\n---DESENHANDO O SVG COM OS ELEMENTOS LIDOS---\n");
     No* aux = lista;
     fprintf(svg, "<svg>\n");
     while(aux != NULL){
@@ -31,5 +31,6 @@ No* desenhaSvg(No* lista, char* caminho){
     }
     fprintf(svg, "\n<svg>\n");
     fclose(svg);
+    printf("\n---SVG DESENHADO COM SUCESSO---\n");
     return lista;
 }

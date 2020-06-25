@@ -6,6 +6,7 @@
 #include "trataString.h"
 #include "leituraGeo.h"
 #include "desenhaSvg.h"
+#include "padrao.h"
 
 int main(int argc, char *argv[])
 {
@@ -100,13 +101,13 @@ int main(int argc, char *argv[])
     concatenaCaminhos(entryPath, geoPath, &caminhoConcatenado);
     lista = pegaDadosGeo(lista, caminhoConcatenado);
 
-    //Constroi o svg com base na lista feita na func anteiror
+    // //Constroi o svg com base na lista feita na func anteiror
     getNomeConcatExtension(geoPath, ".svg", &nomeArquivo);
     concatenaCaminhos(outPath, nomeArquivo, &caminhoConcatenadoSaida);
     lista = desenhaSvg(lista, caminhoConcatenadoSaida);
     
-    getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
-    listaQry = 
+    // getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
+    // listaQry = 
 
 
     free(entryPath);

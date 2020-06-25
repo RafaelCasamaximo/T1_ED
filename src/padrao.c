@@ -6,24 +6,32 @@ void condicionaRetangulo(float* x, float* y, float* w, float* h){
     float yf = *y;
     float wf = *w;
     float hf = *h;
-    // if(xf < (xf+wf)){
-    //     if(yf < (yf+hf)){
-    //         //1
+    if(xf < (xf+wf)){
+        if(yf > (yf+hf)){
+            //2
+            *x = xf;
+            *y = yf + hf;
 
-    //     }
-    //     else{
-    //         //2
-            
-    //     }
-    // }
-    // else{
-    //     if(yf < (yf+hf)){
-    //         //3
+            *w = wf;
+            *h = hf * (-1);
+        }
+    }
+    else{
+        if(yf < (yf+hf)){
+            //3
+            *x = xf + wf;
+            *y = yf;
 
-    //     }
-    //     else{
-    //         //4
+            *w = wf * (-1);
+            *h = hf;
+        }
+        else{
+            //4
+            *x = xf + wf;
+            *y = yf + hf;
 
-    //     }
-    // }
+            *w = wf * (-1);
+            *h = hf * (-1);
+        }
+    }
 }
