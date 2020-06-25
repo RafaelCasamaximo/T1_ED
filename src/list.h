@@ -37,5 +37,5 @@ No* buscaElem(No* inicio, int id);
 No* addC(No* inicio, int id, float r, float x, float y, char corb[], char corp[]);
 No* addR(No* inicio, int id, float w, float h, float x, float y, char corb[], char corp[]);
 No* addT(No* inicio, int id, char texto[], float x, float y, char corb[], char corp[], int buffersize);
-No* delLista(No* lista);
+No* delLista(No* inicio);
 #endif

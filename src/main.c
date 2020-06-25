@@ -6,6 +6,7 @@
 #include "trataString.h"
 #include "leituraGeo.h"
 #include "desenhaSvg.h"
+#include "leituraQry.h"
 #include "padrao.h"
 
 int main(int argc, char *argv[])
@@ -106,8 +107,10 @@ int main(int argc, char *argv[])
     concatenaCaminhos(outPath, nomeArquivo, &caminhoConcatenadoSaida);
     lista = desenhaSvg(lista, caminhoConcatenadoSaida);
     
-    // getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
-    // listaQry = 
+    if(queryPath != NULL){
+        getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
+        listaQry = pegaDadoQry(listaQry, lista, caminhoConcatenadoQuery);
+    }
 
 
     free(entryPath);
@@ -123,6 +126,7 @@ int main(int argc, char *argv[])
     }
     if(caminhoConcatenadoQuery != NULL){
         free(caminhoConcatenadoQuery);
+        lista = delLista(listaQry);
     }
 
     lista = delLista(lista);
