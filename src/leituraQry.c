@@ -38,12 +38,15 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         }
         if(strcmp(comando, "pnt*")){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
+            resultado = paintN(lista, j, k, cb, cp);
         }
         if(strcmp(comando, "delf")){
             fscanf(qry, "%d", &j);
+            resultado = dElem(lista, j);
         }
         if(strcmp(comando, "delf*")){
             fscanf(qry, "%d %d", &j, &k);
+            resultado = dElemN(lista, j, k);
         }
         id++;
     }
@@ -196,5 +199,32 @@ int paint(No* lista, int j, char cb[], char cp[]){
         strcpy(aux->fig->t.corp, cp);
     }
     
+    return 1;
+}
+
+int paintN(No* lista, int j, int k, char cb[], char cp[]){
+    int menor, maior;
+    maior = max(j, k);
+    menor = min(j, k);
+
+    for(int i = menor; i <= maior; i++){
+        paint(lista, i, cb, cp);
+    }
+    return 1;
+}
+
+int dElem(No* lista, int j){
+    lista = delElem(lista, j);
+    return 1;
+}
+
+int dElemN(No* lista, int j, int k){
+    int menor, maior;
+    maior = max(j, k);
+    menor = min(j, k);
+
+    for(int i = menor; i <= maior; i++){
+        dElem(lista, i);
+    }
     return 1;
 }

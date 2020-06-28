@@ -133,3 +133,45 @@ No* delLista(No* inicio){
     printf("\n---Lista deletada com sucesso---\n");
     return inicio;
 }
+
+No* delElem(No* lista, int id){
+    if(lista == NULL){
+        printf("A lista está vazia!");
+        return NULL;
+    }
+
+    No* aux = NULL;
+    No* ant = NULL;
+    aux = lista;
+
+    if(aux->id == id){
+        lista = aux->prox;
+    if(aux->tipo == 't'){
+        free(aux->fig->t.texto);
+    }
+    free(aux->fig);
+    free(aux);
+    printf("\n\tElemento deletado com sucesso! ID: %d", id);
+    return lista;
+    }
+
+    while(aux != NULL && aux->id != id){
+        ant = aux;
+        aux = aux->prox;
+        if(aux->prox == NULL){
+            printf("\n\tNao foi possivel encontrar o elemento de ID: %d", id);
+            return lista;
+        }
+    }
+
+    ant->prox = aux->prox;
+    if(aux->tipo == 't'){
+        free(aux->fig->t.texto);
+    }
+    free(aux->fig);
+    free(aux);
+    printf("\n\tElemento deletado com sucesso! ID: %d", id);
+    
+    return lista;
+
+}
