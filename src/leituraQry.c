@@ -34,6 +34,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         }
         if(strcmp(comando, "pnt")){
             fscanf(qry, "%d %s %s", &j, cb, cp);
+            resultado = paint(lista, j, cb, cp);
         }
         if(strcmp(comando, "pnt*")){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
@@ -53,7 +54,6 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
 int sobrepoe(No* lista, int j, int k){
     No* auxJ = NULL;
     No* auxK = NULL;
-    int resultado = 0;
 
     //Verificações
     auxJ = buscaElem(lista, j);
@@ -172,4 +172,29 @@ int contem(No* lista, int j, float x, float y){
 
 float distanciaQuadrada(float x1, float  y1, float  x2, float  y2){
     return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
+}
+
+int paint(No* lista, int j, char cb[], char cp[]){
+    No *aux = buscaElem(lista, j);
+    if(aux == NULL){
+        printf("\n\tNao foi possivel encontrar o elemento J. ID: %d!", j);
+        return 0;
+    }
+
+    if(aux->tipo == 'c'){
+        strcpy(aux->fig->c.corb, cb);
+        strcpy(aux->fig->c.corp, cp);
+    }
+
+    else if(aux->tipo == 'r'){
+        strcpy(aux->fig->r.corb, cb);
+        strcpy(aux->fig->r.corp, cp);
+    }
+
+    else if(aux->tipo == 't'){
+        strcpy(aux->fig->t.corb, cb);
+        strcpy(aux->fig->t.corp, cp);
+    }
+    
+    return 1;
 }
