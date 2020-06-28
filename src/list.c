@@ -119,6 +119,36 @@ No* addT(No* inicio, int id, char texto[], float x, float y, char corb[], char c
     return inicio;
 }
 
+No* addL(No* inicio, int id, float x1, float y1, float x2, float y2, int interno){
+    No* aux = buscaElem(inicio, id);
+    aux->fig = (Fig*)malloc(sizeof(Fig));
+    if(aux->fig == NULL){
+        printf("Não foi possivel alocar memória para a figura. Encerrando programa");
+        exit(1);
+    }
+    return inicio;
+}
+
+No* addP(No* inicio, int id, float x, float y, int interno){
+    No* aux = buscaElem(inicio, id);
+    aux->fig = (Fig*)malloc(sizeof(Fig));
+    if(aux->fig == NULL){
+        printf("Não foi possivel alocar memória para a figura. Encerrando programa");
+        exit(1);
+    }
+    return inicio;
+}
+
+No* addRT(No* inicio, int id, float x, float y, float w, float h, int sobrepoe){
+    No* aux = buscaElem(inicio, id);
+    aux->fig = (Fig*)malloc(sizeof(Fig));
+    if(aux->fig == NULL){
+        printf("Não foi possivel alocar memória para a figura. Encerrando programa");
+        exit(1);
+    }
+    return inicio;
+}
+
 No* delLista(No* inicio){
     No* aux = NULL;
     while(inicio != NULL){
