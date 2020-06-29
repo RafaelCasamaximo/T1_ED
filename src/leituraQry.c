@@ -15,10 +15,9 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
     }
 
     int j = 0, k = 0, id = 0;
-    float x, y, w, h;
+    float x = 0, y = 0, w = 0, h = 0, xc = 0, yc = 0;
     char cb[22], cp[22], comando[6];
     int resultado = 0, resultadoPegaCoordenadas = 0, resultadoCentroDeMassa = 0;
-    float xc, yc;
 
     while(1){
         fscanf(qry, "%s", comando); //vai pra proxima linha automaticamente?
@@ -206,9 +205,6 @@ int contem(No* lista, int j, float x, float y){
     return 0;
 }
 
-float distanciaQuadrada(float x1, float  y1, float  x2, float  y2){
-    return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
-}
 
 int paint(No* lista, int j, char cb[], char cp[]){
     No *aux = buscaElem(lista, j);
@@ -310,10 +306,10 @@ int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float
         return 0;
     }
 
-    *x = minV(vX);
-    *y = minV(vY);
-    *w = maxV(vX) - *x;
-    *h = maxV(vY) - *y;
+    *x = minV(vX, 4);
+    *y = minV(vY, 4);
+    *w = maxV(vX, 4) - *x;
+    *h = maxV(vY, 4) - *y;
     return 1;
 }
 

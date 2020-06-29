@@ -33,6 +33,11 @@ void condicionaRetangulo(float* x, float* y, float* w, float* h){
     }
 }
 
+
+float distanciaQuadrada(float x1, float  y1, float  x2, float  y2){
+    return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
+}
+
 float min(float a, float b){
     return ((a < b) ? a : b);
 }
@@ -41,8 +46,7 @@ float max(float a, float b){
     return ((a > b) ? a : b);
 }
 
-float minV(float v[]){
-    size_t tamanho = sizeof(v) / sizeof(float);
+float minV(float v[], int tamanho){
     float min = v[0];
     for(int i = 1; i < tamanho; i++){
         if(min > v[i]){
@@ -52,8 +56,7 @@ float minV(float v[]){
     return min;
 }
 
-float maxV(float v[]){
-    size_t tamanho = sizeof(v) / sizeof(float);
+float maxV(float v[], int tamanho){
     float max = v[0];
     for(int i = 1; i < tamanho; i++){
         if(max < v[i]){
