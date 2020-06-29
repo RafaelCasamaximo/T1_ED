@@ -15,9 +15,10 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
     }
 
     int j = 0, k = 0, id = 0;
-    float x, y;
+    float x, y, w, h;
     char cb[22], cp[22], comando[6];
-    int resultado = 0;
+    int resultado = 0, resultadoPegaCoordenadas = 0, resultadoCentroDeMassa = 0;
+    float xc, yc;
 
     while(1){
         fscanf(qry, "%s", comando); //vai pra proxima linha automaticamente?
@@ -27,10 +28,42 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         if(strcmp(comando, "o?")){
             fscanf(qry, "%d %d", &j, &k);
             resultado = sobrepoe(lista, j, k);
+            //Add elem
+            listaQry = addElem(listaQry, id, 'd');
+            //Aqui falta eu pegar as coordenadas para desenhar o retangulo
+            resultadoPegaCoordenadas = pegaCoordanadas(lista, j, k, &x, &y, &w, &h);
+            if(resultado == 1){
+                //Ret cheio
+                listaQry = addRT(listaQry, id, x, y, w, h, 1);
+            }
+            else{
+                //Ret tracejado
+                listaQry = addRT(listaQry, id, x, y, w, h, 0);
+            }
         }
         if(strcmp(comando, "i?")){
             fscanf(qry, "%d %f %f", &j, &x, &y);
             resultado = contem(lista, j, x, y);
+            //add Elem Ponto
+            listaQry = addElem(listaQry, id, 'p');
+            //Soma id++
+            id++;
+            //add Elem Linha
+            listaQry = addElem(listaQry, id, 'l');
+            //Busca o centro de massa do elemento J
+            resultadoCentroDeMassa = pegaCentro(lista, j, &xc, &yc);
+            if(resultado == 1){
+                //Ponto azul
+                listaQry = addL(listaQry, id-1, xc, yc, x, y, 1);
+                //Linha azul
+                listaQry = addP(listaQry, id, xc, yc, 1);
+            }
+            else{
+                //Ponto magenta
+                listaQry = addL(listaQry, id-1, xc, yc, x, y, 0);
+                //Linha magenta
+                listaQry = addP(listaQry, id, xc, yc, 0);
+            }
         }
         if(strcmp(comando, "pnt")){
             fscanf(qry, "%d %s %s", &j, cb, cp);
@@ -225,6 +258,83 @@ int dElemN(No* lista, int j, int k){
 
     for(int i = menor; i <= maior; i++){
         dElem(lista, i);
+    }
+    return 1;
+}
+
+int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float* h){
+    float vX[4], vY[4];
+    No* auxJ = NULL;
+    No* auxK = NULL;
+    auxJ = buscaElem(lista, j);
+    if(auxJ == NULL){
+        printf("Não foi possivel encontrar o elemento J para extrair coordenadas!");
+        return 0;
+    }
+    auxK = buscaElem(lista, k);
+    if(auxJ == NULL){
+        printf("Não foi possivel encontrar o elemento K para extrair coordenadas!");
+        return 0;
+    }
+    if(auxJ->tipo == 'r'){
+        vX[0] = auxJ->fig->r.x;
+        vX[1] = auxJ->fig->r.x + auxJ->fig->r.w;
+        vY[0] = auxJ->fig->r.y;
+        vY[1] = auxJ->fig->r.y + auxJ->fig->r.h;;
+    }
+    if(auxJ->tipo == 'c'){
+        vX[0] = auxJ->fig->c.r + auxJ->fig->c.x;
+        vX[1] = auxJ->fig->c.r - auxJ->fig->c.x;
+        vY[0] = auxJ->fig->c.r + auxJ->fig->c.y;
+        vY[1] = auxJ->fig->c.r - auxJ->fig->c.y;
+    }
+    else{
+        printf("O tipo de elemento do J não é válido! (%c)", auxJ->tipo);
+        return 0;
+    }
+
+    if(auxK->tipo == 'r'){
+        vX[2] = auxK->fig->r.x;
+        vX[3] = auxK->fig->r.x + auxK->fig->r.w;
+        vY[2] = auxK->fig->r.y;
+        vY[3] = auxK->fig->r.y + auxK->fig->r.h;
+    }
+    if(auxK->tipo == 'c'){
+        vX[2] = auxK->fig->c.r + auxK->fig->c.x;
+        vX[3] = auxK->fig->c.r - auxK->fig->c.x;
+        vY[2] = auxK->fig->c.r + auxK->fig->c.y;
+        vY[3] = auxK->fig->c.r - auxK->fig->c.y;
+    }
+    else{
+        printf("O tipo de elemento do K não é válido! (%c)", auxK->tipo);
+        return 0;
+    }
+
+    *x = minV(vX);
+    *y = minV(vY);
+    *w = maxV(vX) - *x;
+    *h = maxV(vY) - *y;
+    return 1;
+}
+
+int pegaCentro(No* lista, int j, float* x, float* y){
+    No* aux = NULL;
+    aux = buscaElem(lista, j);
+    if(aux == NULL){
+        printf("Não é possivel encontrar o elemento para calcular o centro de massa! (%c)", aux->tipo);
+        return 0;
+    }
+    if(aux->tipo == 'c'){
+        *x = aux->fig->c.x;
+        *y = aux->fig->c.y;
+    }
+    if(aux->tipo == 'r'){
+        *x = aux->fig->r.x + (aux->fig->r.w / 2);
+        *y = aux->fig->r.y + (aux->fig->r.h / 2);
+    }
+    else{
+        printf("O tipo do elemento é inválido! Não é possivel calcular o centro de massa desse elemento!");
+        return 0;
     }
     return 1;
 }

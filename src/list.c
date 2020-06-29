@@ -126,6 +126,11 @@ No* addL(No* inicio, int id, float x1, float y1, float x2, float y2, int interno
         printf("Não foi possivel alocar memória para a figura. Encerrando programa");
         exit(1);
     }
+    aux->fig->l.x1 = x1;
+    aux->fig->l.x2 = x2;
+    aux->fig->l.y1 = y1;
+    aux->fig->l.y2 = y2;
+    aux->fig->l.interno = interno;
     return inicio;
 }
 
@@ -136,6 +141,9 @@ No* addP(No* inicio, int id, float x, float y, int interno){
         printf("Não foi possivel alocar memória para a figura. Encerrando programa");
         exit(1);
     }
+    aux->fig->p.x = x;
+    aux->fig->p.y = y;
+    aux->fig->p.interno = interno;
     return inicio;
 }
 
@@ -146,6 +154,11 @@ No* addRT(No* inicio, int id, float x, float y, float w, float h, int sobrepoe){
         printf("Não foi possivel alocar memória para a figura. Encerrando programa");
         exit(1);
     }
+    aux->fig->rt.x = x;
+    aux->fig->rt.y = y;
+    aux->fig->rt.w = w;
+    aux->fig->rt.h = h;
+    aux->fig->rt.sobrepoe = sobrepoe;
     return inicio;
 }
 

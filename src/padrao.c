@@ -41,3 +41,25 @@ float max(float a, float b){
     return ((a > b) ? a : b);
 }
 
+float minV(float v[]){
+    size_t tamanho = sizeof(v) / sizeof(float);
+    float min = v[0];
+    for(int i = 1; i < tamanho; i++){
+        if(min > v[i]){
+            min = v[i];
+        }
+    }
+    return min;
+}
+
+float maxV(float v[]){
+    size_t tamanho = sizeof(v) / sizeof(float);
+    float max = v[0];
+    for(int i = 1; i < tamanho; i++){
+        if(max < v[i]){
+            max = v[i];
+        }
+    }
+    return max;
+}
+

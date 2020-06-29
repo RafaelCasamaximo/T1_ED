@@ -11,5 +11,7 @@ int paint(No* lista, int j, char cb[], char cp[]);
 int paintN(No* lista, int j, int k, char cb[], char cp[]);
 int dElem(No* lista, int j);
 int dElemN(No* lista, int j, int k);
+int pegaCoordanadas(No* lista, int j, int k, float* x,float* y,float* w,float* h);
+int pegaCentro(No* lista, int j, float* x, float* y);
 
 #endif

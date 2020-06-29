@@ -4,5 +4,7 @@
 void condicionaRegantulo(float* x, float* y, float* w, float* h);
 float min(float a, float b);
 float max(float a, float b);
+float minV(float v[]);
+float maxV(float v[]);
 
 #endif

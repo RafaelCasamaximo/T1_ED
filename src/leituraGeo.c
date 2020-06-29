@@ -39,7 +39,7 @@ No* pegaDadosGeo(No* lista, char* dirEntrada){
             addC(lista, id, r, x, y, cb, cp);
         }
         else if(strcmp("r", comando) == 0){
-            fscanf(arqGeo, "%d %f %f %f %f %s %s", &id, &x, &y, &w, &h, cb, cp);
+            fscanf(arqGeo, "%d %f %f %f %f %s %s", &id, &w, &h, &x, &y, cb, cp);
             lista = addElem(lista, id, 'r');
             condicionaRetangulo(&x, &y, &w, &h);
             addR(lista, id, w, h, x, y, cb, cp);
