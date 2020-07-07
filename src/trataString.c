@@ -5,8 +5,7 @@
 
 #include "trataString.h"
 
-void concatenaCaminhos(char e[], char f[], char** result)
-{
+void concatenaCaminhos(char e[], char f[], char** result){
     printf("\ne[] -> %s\n", e);
     printf("\nf[] -> %s\n", f);
 

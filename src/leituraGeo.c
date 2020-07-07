@@ -36,13 +36,13 @@ No* pegaDadosGeo(No* lista, char* dirEntrada){
             //c i r x y corb corp 
             fscanf(arqGeo, "%d %f %f %f %s %s", &id, &r, &x, &y, cb, cp);
             lista = addElem(lista, id, 'c');
-            addC(lista, id, r, x, y, cb, cp);
+            lista = addC(lista, id, r, x, y, cb, cp);
         }
         else if(strcmp("r", comando) == 0){
             fscanf(arqGeo, "%d %f %f %f %f %s %s", &id, &w, &h, &x, &y, cb, cp);
             lista = addElem(lista, id, 'r');
-            condicionaRetangulo(&x, &y, &w, &h);
-            addR(lista, id, w, h, x, y, cb, cp);
+            //condicionaRetangulo(&x, &y, &w, &h);
+            lista = addR(lista, id, w, h, x, y, cb, cp);
         }
         else if(strcmp("t", comando) == 0){
             //t i x y cb cp txt

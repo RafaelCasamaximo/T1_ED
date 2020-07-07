@@ -13,18 +13,22 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         printf("ERRO! Não foi possivel abrir o arquivo! O QRY não será considerado!");
         exit(1);
     }
+    printf("\nArquivo QRY aberto com sucesso!\n");
 
-    int j = 0, k = 0, id = 0;
+    int j = 0, k = 0;
+    int id = 0;
     float x = 0, y = 0, w = 0, h = 0, xc = 0, yc = 0;
-    char cb[22], cp[22], comando[6];
-    int resultado = 0, resultadoPegaCoordenadas = 0, resultadoCentroDeMassa = 0;
+    char cb[22], cp[22];
+    char comando[6];
+    int resultado = 0;
+    int resultadoPegaCoordenadas = 0, resultadoCentroDeMassa = 0;
 
     while(1){
         fscanf(qry, "%s", comando); //vai pra proxima linha automaticamente?
         if(feof(qry)){
             break;
         }
-        if(strcmp(comando, "o?")){
+        /*if(strcmp(comando, "o?")){
             fscanf(qry, "%d %d", &j, &k);
             resultado = sobrepoe(lista, j, k);
             //Add elem
@@ -64,19 +68,21 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
                 listaQry = addP(listaQry, id, xc, yc, 0);
             }
         }
-        if(strcmp(comando, "pnt")){
+        */
+        if(strcmp(comando, "pnt") == 0){
             fscanf(qry, "%d %s %s", &j, cb, cp);
+            printf("%s %s", cb, cp);
             resultado = paint(lista, j, cb, cp);
         }
-        if(strcmp(comando, "pnt*")){
+        if(strcmp(comando, "pnt*") == 0){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
             resultado = paintN(lista, j, k, cb, cp);
         }
-        if(strcmp(comando, "delf")){
+        if(strcmp(comando, "delf") == 0){
             fscanf(qry, "%d", &j);
             resultado = dElem(lista, j);
         }
-        if(strcmp(comando, "delf*")){
+        if(strcmp(comando, "delf*") == 0){
             fscanf(qry, "%d %d", &j, &k);
             resultado = dElemN(lista, j, k);
         }
@@ -85,6 +91,23 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
     fclose(qry);
     return listaQry;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int sobrepoe(No* lista, int j, int k){
     No* auxJ = NULL;
@@ -207,6 +230,9 @@ int contem(No* lista, int j, float x, float y){
 
 
 int paint(No* lista, int j, char cb[], char cp[]){
+
+    printf("---%s %s---", cb, cp);
+
     No *aux = buscaElem(lista, j);
     if(aux == NULL){
         printf("\n\tNao foi possivel encontrar o elemento J. ID: %d!", j);

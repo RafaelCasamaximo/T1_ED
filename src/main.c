@@ -106,13 +106,17 @@ int main(int argc, char *argv[])
     getNomeConcatExtension(geoPath, ".svg", &nomeArquivo);
     concatenaCaminhos(outPath, nomeArquivo, &caminhoConcatenadoSaida);
     lista = desenhaSvg(lista, caminhoConcatenadoSaida);
-    
+
     if(queryPath != NULL){
-        getNomeConcatExtension(entryPath, queryPath, &caminhoConcatenadoQuery);
+        concatenaCaminhos(entryPath, queryPath, &caminhoConcatenadoQuery);
         listaQry = pegaDadoQry(listaQry, lista, caminhoConcatenadoQuery);
     }
 
 
+    /*Coisas para arrumar
+        acertar o nome do novo svg gerado pelo qry
+        testar todas as partes do QRY
+    */
     free(entryPath);
     free(geoPath);
     free(queryPath);
@@ -126,7 +130,7 @@ int main(int argc, char *argv[])
     }
     if(caminhoConcatenadoQuery != NULL){
         free(caminhoConcatenadoQuery);
-        lista = delLista(listaQry);
+        //lista = delLista(listaQry);
     }
 
     lista = delLista(lista);

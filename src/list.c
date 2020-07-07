@@ -32,7 +32,7 @@ No* addElem(No* inicio, int id, char tipo){
         aux->tipo = tipo;
         aux->fig = NULL;
         aux->prox = NULL;
-        printf("\nElemento adicionado como sucesso (ID: %d TIPO: %c)", aux->id, aux->tipo);
+        printf("\n\nElemento adicionado como sucesso (ID: %d TIPO: %c)", aux->id, aux->tipo);
     }
     return inicio;
 }
@@ -52,7 +52,7 @@ No* buscaElem(No* inicio, int id){
     No *aux = inicio;
     while(aux != NULL){
         if(id == aux->id){
-            printf("\n\nRetornando elemento de ID: %d", id);
+            printf("\nRetornando elemento de ID: %d", id);
             return aux;
         }
         aux = aux->prox;
@@ -88,7 +88,7 @@ No* addR(No* inicio, int id, float w, float h, float x, float y, char corb[], ch
         exit(1);
     }
     aux->fig->r.w = w;
-    aux->fig->r.w = h;
+    aux->fig->r.h = h;
     aux->fig->r.x = x;
     aux->fig->r.y = y;
     strcpy(aux->fig->r.corb, corb);
