@@ -47,6 +47,7 @@ No* desenhaSvgQry(No* lista, No* listaQry, char* caminho){
     fprintf(svgQry, "<svg>\n");
     while(aux != NULL){
         if(aux->fig != NULL){
+            printf("IMPRIME LISTA DO GEO ");
             if(aux->tipo == 'c'){
                 fprintf(svgQry, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"%f\" stroke=\"%s\" fill=\"%s\"/>", aux->fig->c.x, aux->fig->c.y, aux->fig->c.r, aux->fig->c.corb, aux->fig->c.corp);
             }
@@ -61,6 +62,8 @@ No* desenhaSvgQry(No* lista, No* listaQry, char* caminho){
     }
     No* auxQry = listaQry;
     while(auxQry != NULL){
+        printf("IMPRIME LISTA DO QRY ");
+        /*
         if(auxQry->tipo == 'l'){
             if(auxQry->fig->l.interno == 1){
                 fprintf(svgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:blue; stroke-width:2\"/>", auxQry->fig->l.x1 , auxQry->fig->l.y1 , auxQry->fig->l.x2 , auxQry->fig->l.y2);
@@ -84,7 +87,10 @@ No* desenhaSvgQry(No* lista, No* listaQry, char* caminho){
             else{
                 fprintf(svgQry, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" fill-opacity=\"0.0\" style=\"stroke-width:4px;stroke:black;stroke-dasharray: 20 20;\"/>", auxQry->fig->r.x, auxQry->fig->r.y, auxQry->fig->r.w, auxQry->fig->r.h);
             }
-        }
+        }*/
+        auxQry = auxQry->prox;
     }
+    fprintf(svgQry, "\n<svg>\n");
+    fclose(svgQry);
     return listaQry;
 }

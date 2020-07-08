@@ -77,3 +77,35 @@ void getNomeConcatExtension(char f[], char ext[], char** result){
     strcpy(*result, aux);
     strcat(*result, ext);
 }
+
+void extraiNome(char f[], char** result){
+    printf("\nRetirando o nome do arquivo da sentença: \"%s\"\n", f);
+    char* aux = NULL;
+    int tamF = strlen(f);
+    //Encontra pos do último / no f
+    if(f[0] == '.'){
+        aux = strtok(f + 1, ".");
+    }
+    aux = strtok(f, ".");
+    bool temBarra = false;
+    for(int i = 0; i < (tamF - 1); i++){
+        if(f[i] == '/'){
+            temBarra = true;
+        }
+    }
+    if(temBarra){
+        aux = strrchr(f, '/') + 1;
+    }
+    printf("\n%s\n", aux);
+    *result = malloc(strlen(aux) +  1);
+    strcpy(*result, aux);
+}
+
+void concatenaNomeGeoQry(char geo[], char qry[], char ext[], char** result){
+    int tamanho = strlen(geo) + strlen(qry) + strlen(ext);
+    *result = malloc(tamanho + 2);
+    strcpy(*result, geo);
+    strcat(*result, "-");
+    strcat(*result, qry);
+    strcat(*result, ext);
+}

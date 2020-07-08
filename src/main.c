@@ -23,7 +23,11 @@ int main(int argc, char *argv[])
     char *caminhoConcatenado = NULL;
     char *caminhoConcatenadoSaida = NULL;
     char *caminhoConcatenadoQuery = NULL;
+    char *caminhoConcatenadoGeoQry = NULL;
+    char *nomeArquivoGeo = NULL;
     char *nomeArquivo = NULL;
+    char *nomeArquivoQuery = NULL;
+    char *nomeArquivoQuerySvg = NULL;
 
     //Lê os argumentos passados para o executável
     while (i < argc){
@@ -110,6 +114,13 @@ int main(int argc, char *argv[])
     if(queryPath != NULL){
         concatenaCaminhos(entryPath, queryPath, &caminhoConcatenadoQuery);
         listaQry = pegaDadoQry(listaQry, lista, caminhoConcatenadoQuery);
+
+        extraiNome(queryPath, &nomeArquivoQuery);
+        extraiNome(geoPath, &nomeArquivoGeo);
+        concatenaNomeGeoQry(nomeArquivoGeo, nomeArquivoQuery, ".svg", &nomeArquivoQuerySvg);
+        printf("%s", nomeArquivoQuerySvg);
+        concatenaCaminhos(outPath, nomeArquivoQuerySvg, &caminhoConcatenadoGeoQry);
+        listaQry = desenhaSvgQry(lista, listaQry, caminhoConcatenadoGeoQry);
     }
 
 
@@ -129,8 +140,14 @@ int main(int argc, char *argv[])
         free(caminhoConcatenadoSaida);
     }
     if(caminhoConcatenadoQuery != NULL){
+        free(caminhoConcatenadoGeoQry);
+        free(nomeArquivoGeo);
+        free(nomeArquivoQuery);
         free(caminhoConcatenadoQuery);
-        //lista = delLista(listaQry);
+        free(nomeArquivoQuerySvg);
+        if(listaQry != NULL){
+            listaQry = delLista(listaQry);
+        }
     }
 
     lista = delLista(lista);
