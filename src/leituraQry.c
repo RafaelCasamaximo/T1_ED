@@ -71,20 +71,34 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         */
         if(strcmp(comando, "pnt") == 0){
             fscanf(qry, "%d %s %s", &j, cb, cp);
-            printf("%s %s", cb, cp);
+            printf("\n\nALTERANDO PARA CB - \"%s\" CP - \"%s\"", cb, cp);
             resultado = paint(lista, j, cb, cp);
+            if(resultado == 1){
+                printf("\n---SUCESSO NA ALTERAÇÃO---");
+            }
+            else{
+                printf("\n---FALHA NA ALTERAÇÃO---");
+            }
         }
         if(strcmp(comando, "pnt*") == 0){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
             resultado = paintN(lista, j, k, cb, cp);
+            if(resultado == 1){
+                printf("\n---SUCESSO NA ALTERAÇÃO---");
+            }
+            else{
+                printf("\n---FALHA NA ALTERAÇÃO---");
+            }
         }
         if(strcmp(comando, "delf") == 0){
             fscanf(qry, "%d", &j);
             resultado = dElem(lista, j);
+            printf("\nCaso o elemento %d exista, ele foi deletado.", j);
         }
         if(strcmp(comando, "delf*") == 0){
             fscanf(qry, "%d %d", &j, &k);
             resultado = dElemN(lista, j, k);
+            printf("\nTodos os elementos que existam entre %d e %d foram deletados", j, k);
         }
         id++;
     }
@@ -230,8 +244,6 @@ int contem(No* lista, int j, float x, float y){
 
 
 int paint(No* lista, int j, char cb[], char cp[]){
-
-    printf("---%s %s---", cb, cp);
 
     No *aux = buscaElem(lista, j);
     if(aux == NULL){

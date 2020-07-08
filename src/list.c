@@ -202,7 +202,7 @@ No* delElem(No* lista, int id){
         ant = aux;
         aux = aux->prox;
         if(aux->prox == NULL){
-            printf("\n\tNao foi possivel encontrar o elemento de ID: %d", id);
+            printf("\n\tNao foi possivel encontrar o elemento de ID: %d! Esse elemento não existe, logo não há como deletar", id);
             return lista;
         }
     }
