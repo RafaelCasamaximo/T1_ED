@@ -43,9 +43,10 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
                 //Ret tracejado
                 listaQry = addRT(listaQry, id, x, y, w, h, 0);
             }
-        }
-        if(strcmp(comando, "i?")){
+        }*/
+        if(strcmp(comando, "i?") == 0){
             fscanf(qry, "%d %f %f", &j, &x, &y);
+            printf("\n-------------%f %f-------------", x, y);
             resultado = contem(lista, j, x, y);
             //add Elem Ponto
             listaQry = addElem(listaQry, id, 'p');
@@ -68,7 +69,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
                 listaQry = addP(listaQry, id, xc, yc, 0);
             }
         }
-        */
+        
         if(strcmp(comando, "pnt") == 0){
             fscanf(qry, "%d %s %s", &j, cb, cp);
             printf("\n\nALTERANDO PARA CB - \"%s\" CP - \"%s\"", cb, cp);
@@ -102,26 +103,10 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         }
         id++;
     }
+    listaQry = imprimeLista(listaQry);
     fclose(qry);
     return listaQry;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int sobrepoe(No* lista, int j, int k){
     No* auxJ = NULL;

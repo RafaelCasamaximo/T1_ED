@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
         concatenaNomeGeoQry(nomeArquivoGeo, nomeArquivoQuery, ".svg", &nomeArquivoQuerySvg);
         printf("%s", nomeArquivoQuerySvg);
         concatenaCaminhos(outPath, nomeArquivoQuerySvg, &caminhoConcatenadoGeoQry);
-        listaQry = desenhaSvgQry(lista, listaQry, caminhoConcatenadoGeoQry);
+        //listaQry = desenhaSvgQry(lista, listaQry, caminhoConcatenadoGeoQry);
     }
 
 
