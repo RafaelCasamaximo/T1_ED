@@ -3,7 +3,7 @@
 
 #include "list.h"
 
-No* pegaDadoQry(No* listaQry, No* lista, char* path);
+No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog);
 int sobrepoe(No* lista, int j, int k);
 int contem(No* lista, int id, float x, float y);
 int paint(No* lista, int j, char cb[], char cp[]);

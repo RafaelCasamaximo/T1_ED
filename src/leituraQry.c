@@ -4,9 +4,10 @@
 
 #include "leituraQry.h"
 #include "list.h"
+#include "logTxt.h"
 #include "padrao.h"
 
-No* pegaDadoQry(No* listaQry, No* lista, char* path){
+No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
     FILE* qry = NULL;
     qry = fopen(path, "r");
     if(qry == NULL){
@@ -14,6 +15,14 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         exit(1);
     }
     printf("\nArquivo QRY aberto com sucesso!\n");
+
+    FILE* log = NULL;
+    log = fopen(pathLog, "a");
+    if(log == NULL){
+        printf("ERRO! Não foi possivel criar o arquivo! O LOG não será gerado!");
+    }
+    printf("\nArquivo LOG aberto com sucesso!\n");
+    fclose(log);
 
     int j = 0, k = 0;
     int id = 0;
@@ -28,9 +37,11 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
         if(feof(qry)){
             break;
         }
-        /*if(strcmp(comando, "o?")){
+        
+        if(strcmp(comando, "o?") == 0){
             fscanf(qry, "%d %d", &j, &k);
             resultado = sobrepoe(lista, j, k);
+            logOverlay(lista, pathLog, j, k, resultado);
             //Add elem
             listaQry = addElem(listaQry, id, 'd');
             //Aqui falta eu pegar as coordenadas para desenhar o retangulo
@@ -43,30 +54,23 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path){
                 //Ret tracejado
                 listaQry = addRT(listaQry, id, x, y, w, h, 0);
             }
-        }*/
+        }
         if(strcmp(comando, "i?") == 0){
             fscanf(qry, "%d %f %f", &j, &x, &y);
-            printf("\n-------------%f %f-------------", x, y);
             resultado = contem(lista, j, x, y);
-            //add Elem Ponto
+            logInside(lista, pathLog, j, x, y, resultado);
             listaQry = addElem(listaQry, id, 'p');
-            //Soma id++
             id++;
-            //add Elem Linha
             listaQry = addElem(listaQry, id, 'l');
             //Busca o centro de massa do elemento J
             resultadoCentroDeMassa = pegaCentro(lista, j, &xc, &yc);
             if(resultado == 1){
-                //Ponto azul
-                listaQry = addL(listaQry, id-1, xc, yc, x, y, 1);
-                //Linha azul
-                listaQry = addP(listaQry, id, xc, yc, 1);
+                listaQry = addP(listaQry, id-1, xc, yc, 1);
+                listaQry = addL(listaQry, id, xc, yc, x, y, 1);
             }
             else{
-                //Ponto magenta
-                listaQry = addL(listaQry, id-1, xc, yc, x, y, 0);
-                //Linha magenta
-                listaQry = addP(listaQry, id, xc, yc, 0);
+                listaQry = addP(listaQry, id-1, xc, yc, 0);
+                listaQry = addL(listaQry, id, xc, yc, x, y, 0);
             }
         }
         
@@ -302,13 +306,13 @@ int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float
         vY[1] = auxJ->fig->r.y + auxJ->fig->r.h;;
     }
     if(auxJ->tipo == 'c'){
-        vX[0] = auxJ->fig->c.r + auxJ->fig->c.x;
-        vX[1] = auxJ->fig->c.r - auxJ->fig->c.x;
-        vY[0] = auxJ->fig->c.r + auxJ->fig->c.y;
-        vY[1] = auxJ->fig->c.r - auxJ->fig->c.y;
+        vX[0] = auxJ->fig->c.x + auxJ->fig->c.r;
+        vX[1] = auxJ->fig->c.x - auxJ->fig->c.r;
+        vY[0] = auxJ->fig->c.y + auxJ->fig->c.r;
+        vY[1] = auxJ->fig->c.y - auxJ->fig->c.r;
     }
-    else{
-        printf("O tipo de elemento do J não é válido! (%c)", auxJ->tipo);
+    if(auxJ->tipo != 'r' && auxJ->tipo != 'c'){
+        printf("\nO tipo de elemento do J não é válido! (%c)", auxJ->tipo);
         return 0;
     }
 
@@ -319,13 +323,13 @@ int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float
         vY[3] = auxK->fig->r.y + auxK->fig->r.h;
     }
     if(auxK->tipo == 'c'){
-        vX[2] = auxK->fig->c.r + auxK->fig->c.x;
-        vX[3] = auxK->fig->c.r - auxK->fig->c.x;
-        vY[2] = auxK->fig->c.r + auxK->fig->c.y;
-        vY[3] = auxK->fig->c.r - auxK->fig->c.y;
+        vX[2] = auxK->fig->c.x + auxK->fig->c.r;
+        vX[3] = auxK->fig->c.x - auxK->fig->c.r;
+        vY[2] = auxK->fig->c.y + auxK->fig->c.r;
+        vY[3] = auxK->fig->c.y - auxK->fig->c.r;
     }
-    else{
-        printf("O tipo de elemento do K não é válido! (%c)", auxK->tipo);
+    if(auxK->tipo != 'r' && auxK->tipo != 'c'){
+        printf("\nO tipo de elemento do K não é válido! (%c)", auxK->tipo);
         return 0;
     }
 
