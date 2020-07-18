@@ -78,6 +78,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
             fscanf(qry, "%d %s %s", &j, cb, cp);
             printf("\n\nALTERANDO PARA CB - \"%s\" CP - \"%s\"", cb, cp);
             resultado = paint(lista, j, cb, cp);
+            logPaint(lista, pathLog, j);
             if(resultado == 1){
                 printf("\n---SUCESSO NA ALTERAÇÃO---");
             }
@@ -87,7 +88,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
         }
         if(strcmp(comando, "pnt*") == 0){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
-            resultado = paintN(lista, j, k, cb, cp);
+            resultado = paintN(lista, j, k, cb, cp, pathLog);
             if(resultado == 1){
                 printf("\n---SUCESSO NA ALTERAÇÃO---");
             }
@@ -258,13 +259,14 @@ int paint(No* lista, int j, char cb[], char cp[]){
     return 1;
 }
 
-int paintN(No* lista, int j, int k, char cb[], char cp[]){
+int paintN(No* lista, int j, int k, char cb[], char cp[], char* path){
     int menor, maior;
     maior = max(j, k);
     menor = min(j, k);
 
     for(int i = menor; i <= maior; i++){
         paint(lista, i, cb, cp);
+        logPaint(lista, path, i);
     }
     return 1;
 }

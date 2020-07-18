@@ -59,7 +59,7 @@ void logPaint(No* lista, char* path, int j){
         printf("Não foi possivel adicionar mais ao arquivo!");
     }
     No* aux = buscaElem(lista, j);
-    fprintf(log, "pnt %d ", j);
+    fprintf(log, "\npnt %d ", j);
     if(aux->tipo == 'c'){
         fprintf(log, " %s %s\n", aux->fig->c.corb, aux->fig->c.corp);
         fprintf(log, "%d: %f %f\n", j, aux->fig->c.x, aux->fig->c.y);
@@ -72,4 +72,5 @@ void logPaint(No* lista, char* path, int j){
         fprintf(log, " %s %s\n", aux->fig->t.corb, aux->fig->t.corp);
         fprintf(log, "%d: %f %f\n", j, aux->fig->t.x, aux->fig->t.y);
     }
+    fclose(log);
 }
