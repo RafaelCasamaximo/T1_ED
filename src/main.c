@@ -123,20 +123,26 @@ int main(int argc, char *argv[])
         printf("%s", nomeArquivoQuerySvg);
         concatenaCaminhos(outPath, nomeArquivoQuerySvg, &caminhoConcatenadoGeoQry);
         concatenaCaminhos(outPath, nomeArquivoLogTxt, &caminhoConcatenadoLogQry);
-        listaQry = pegaDadoQry(listaQry, lista, caminhoConcatenadoQuery, caminhoConcatenadoLogQry);
+        listaQry = pegaDadoQry(listaQry, &lista, caminhoConcatenadoQuery, caminhoConcatenadoLogQry);
         listaQry = desenhaSvgQry(lista, listaQry, caminhoConcatenadoGeoQry);
     }
 
 
-    /*Coisas para arrumar
-        acertar o nome do novo svg gerado pelo qry
-        testar todas as partes do QRY
-    */
-    free(entryPath);
-    free(geoPath);
-    free(queryPath);
-    free(outPath);
-    free(caminhoConcatenado);
+    if(entryPath != NULL){
+        free(entryPath);
+    }
+    if(geoPath != NULL){
+       free(geoPath);
+    }
+    if(queryPath != NULL){
+        free(queryPath);
+    }
+    if(outPath != NULL){
+        free(outPath);
+    }
+    if(caminhoConcatenado != NULL){
+        free(caminhoConcatenado);
+    }
     if(nomeArquivo != NULL){
        free(nomeArquivo); 
     }
@@ -145,16 +151,26 @@ int main(int argc, char *argv[])
     }
     if(caminhoConcatenadoQuery != NULL){
         free(caminhoConcatenadoGeoQry);
-        free(nomeArquivoGeo);
-        free(nomeArquivoQuery);
-        free(caminhoConcatenadoQuery);
-        free(nomeArquivoQuerySvg);
-        free(caminhoConcatenadoLogQry);
-        free(nomeArquivoLogTxt);
-        if(listaQry != NULL){
-            listaQry = delLista(listaQry);
-        }
     }
+    if(nomeArquivoGeo != NULL){
+        free(nomeArquivoGeo);
+    }
+    if(nomeArquivoQuery != NULL){
+        free(nomeArquivoQuery);
+    }
+    if(caminhoConcatenadoQuery != NULL){
+        free(caminhoConcatenadoQuery);
+    }
+    if(nomeArquivoQuerySvg != NULL){
+        free(nomeArquivoQuerySvg);
+    }
+    if(caminhoConcatenadoLogQry != NULL){
+        free(caminhoConcatenadoLogQry);
+    }
+    if(nomeArquivoLogTxt != NULL){
+        free(nomeArquivoLogTxt);
+    }
+    listaQry = delLista(listaQry);
     lista = delLista(lista);
 
     return 0;

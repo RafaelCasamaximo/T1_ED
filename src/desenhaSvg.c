@@ -59,35 +59,37 @@ No* desenhaSvgQry(No* lista, No* listaQry, char* caminho){
         }
         aux = aux->prox;
     }
-    No* auxQry = listaQry;
-    while(auxQry != NULL){
-        
-        if(auxQry->tipo == 'l'){
-            if(auxQry->fig->l.interno == 1){
-                fprintf(svgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:blue; stroke-width:2\"/>", auxQry->fig->l.x1 , auxQry->fig->l.y1 , auxQry->fig->l.x2 , auxQry->fig->l.y2);
+    if(listaQry != NULL){
+       No* auxQry = listaQry;
+        while(auxQry != NULL){
+            
+            if(auxQry->tipo == 'l'){
+                if(auxQry->fig->l.interno == 1){
+                    fprintf(svgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:blue; stroke-width:2\"/>", auxQry->fig->l.x1 , auxQry->fig->l.y1 , auxQry->fig->l.x2 , auxQry->fig->l.y2);
+                }
+                else{
+                    fprintf(svgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:magenta; stroke-width:2\"/>", auxQry->fig->l.x1 , auxQry->fig->l.y1 , auxQry->fig->l.x2 , auxQry->fig->l.y2);
+                }
             }
-            else{
-                fprintf(svgQry, "\n\t<line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" style=\"stroke:magenta; stroke-width:2\"/>", auxQry->fig->l.x1 , auxQry->fig->l.y1 , auxQry->fig->l.x2 , auxQry->fig->l.y2);
+            if(auxQry->tipo == 'p'){
+                if(auxQry->fig->p.interno == 1){
+                    fprintf(svgQry, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"3\" fill=\"blue\"/>", auxQry->fig->p.x, auxQry->fig->p.y);
+                }
+                else{
+                    fprintf(svgQry, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"3\" fill=\"magenta\"/>", auxQry->fig->p.x, auxQry->fig->p.y);
+                }
             }
-        }
-        if(auxQry->tipo == 'p'){
-            if(auxQry->fig->p.interno == 1){
-                fprintf(svgQry, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"3\" fill=\"blue\"/>", auxQry->fig->p.x, auxQry->fig->p.y);
+            
+            if(auxQry->tipo == 'd'){
+                if(auxQry->fig->rt.sobrepoe == 1){
+                    fprintf(svgQry, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" fill-opacity=\"0.0\" style=\"stroke-width:4px;stroke:black;\"/>", auxQry->fig->r.x, auxQry->fig->r.y, auxQry->fig->r.w, auxQry->fig->r.h);
+                }
+                else{
+                    fprintf(svgQry, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" fill-opacity=\"0.0\" style=\"stroke-width:4px;stroke:black;stroke-dasharray: 20 20;\"/>", auxQry->fig->r.x, auxQry->fig->r.y, auxQry->fig->r.w, auxQry->fig->r.h);
+                }
             }
-            else{
-                fprintf(svgQry, "\n\t<circle cx=\"%f\" cy=\"%f\" r=\"3\" fill=\"magenta\"/>", auxQry->fig->p.x, auxQry->fig->p.y);
-            }
-        }
-        
-        if(auxQry->tipo == 'd'){
-            if(auxQry->fig->rt.sobrepoe == 1){
-                fprintf(svgQry, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" fill-opacity=\"0.0\" style=\"stroke-width:4px;stroke:black;\"/>", auxQry->fig->r.x, auxQry->fig->r.y, auxQry->fig->r.w, auxQry->fig->r.h);
-            }
-            else{
-                fprintf(svgQry, "\n\t<rect x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" fill-opacity=\"0.0\" style=\"stroke-width:4px;stroke:black;stroke-dasharray: 20 20;\"/>", auxQry->fig->r.x, auxQry->fig->r.y, auxQry->fig->r.w, auxQry->fig->r.h);
-            }
-        }
-        auxQry = auxQry->prox;
+            auxQry = auxQry->prox;
+        } 
     }
     fprintf(svgQry, "\n<svg>\n");
     fclose(svgQry);

@@ -7,7 +7,7 @@
 #include "logTxt.h"
 #include "padrao.h"
 
-No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
+No* pegaDadoQry(No* listaQry, No** lista, char* path, char* pathLog){
     FILE* qry = NULL;
     qry = fopen(path, "r");
     if(qry == NULL){
@@ -20,6 +20,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
     log = fopen(pathLog, "a");
     if(log == NULL){
         printf("ERRO! Não foi possivel criar o arquivo! O LOG não será gerado!");
+        exit(1);
     }
     printf("\nArquivo LOG aberto com sucesso!\n");
     fclose(log);
@@ -30,45 +31,47 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
     char cb[22], cp[22];
     char comando[6];
     int resultado = 0;
-    int resultadoPegaCoordenadas = 0, resultadoCentroDeMassa = 0;
 
     while(1){
-        fscanf(qry, "%s", comando); //vai pra proxima linha automaticamente?
+        fscanf(qry, "%s", comando);
         if(feof(qry)){
             break;
         }
         
         if(strcmp(comando, "o?") == 0){
             fscanf(qry, "%d %d", &j, &k);
-            resultado = sobrepoe(lista, j, k);
-            logOverlay(lista, pathLog, j, k, resultado);
-            //Add elem
-            listaQry = addElem(listaQry, id, 'd');
-            //Aqui falta eu pegar as coordenadas para desenhar o retangulo
-            resultadoPegaCoordenadas = pegaCoordanadas(lista, j, k, &x, &y, &w, &h);
+            resultado = sobrepoe(*lista, j, k);
+            if(resultado != -1){
+                listaQry = addElem(listaQry, id, 'd');
+                pegaCoordanadas(*lista, j, k, &x, &y, &w, &h);
+            }
             if(resultado == 1){
                 //Ret cheio
+                logOverlay(*lista, pathLog, j, k, resultado);
                 listaQry = addRT(listaQry, id, x, y, w, h, 1);
             }
-            else{
+            else if(resultado == 0){
                 //Ret tracejado
+                logOverlay(*lista, pathLog, j, k, resultado);
                 listaQry = addRT(listaQry, id, x, y, w, h, 0);
             }
         }
         if(strcmp(comando, "i?") == 0){
             fscanf(qry, "%d %f %f", &j, &x, &y);
-            resultado = contem(lista, j, x, y);
-            logInside(lista, pathLog, j, x, y, resultado);
-            listaQry = addElem(listaQry, id, 'p');
-            id++;
-            listaQry = addElem(listaQry, id, 'l');
-            //Busca o centro de massa do elemento J
-            resultadoCentroDeMassa = pegaCentro(lista, j, &xc, &yc);
+            resultado = contem(*lista, j, x, y);
+            if(resultado != -1){
+                logInside(*lista, pathLog, j, x, y, resultado);
+                listaQry = addElem(listaQry, id, 'p');
+                id++;
+                listaQry = addElem(listaQry, id, 'l');
+                //Busca o centro de massa do elemento J
+                pegaCentro(*lista, j, &xc, &yc);
+            }
             if(resultado == 1){
                 listaQry = addP(listaQry, id-1, xc, yc, 1);
                 listaQry = addL(listaQry, id, xc, yc, x, y, 1);
             }
-            else{
+            else if(resultado == 0){
                 listaQry = addP(listaQry, id-1, xc, yc, 0);
                 listaQry = addL(listaQry, id, xc, yc, x, y, 0);
             }
@@ -77,8 +80,8 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
         if(strcmp(comando, "pnt") == 0){
             fscanf(qry, "%d %s %s", &j, cb, cp);
             printf("\n\nALTERANDO PARA CB - \"%s\" CP - \"%s\"", cb, cp);
-            resultado = paint(lista, j, cb, cp);
-            logPaint(lista, pathLog, j);
+            resultado = paint(*lista, j, cb, cp);
+            logPaint(*lista, pathLog, j);
             if(resultado == 1){
                 printf("\n---SUCESSO NA ALTERAÇÃO---");
             }
@@ -88,7 +91,7 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
         }
         if(strcmp(comando, "pnt*") == 0){
             fscanf(qry, "%d %d %s %s", &j, &k, cb, cp);
-            resultado = paintN(lista, j, k, cb, cp, pathLog);
+            resultado = paintN(*lista, j, k, cb, cp, pathLog);
             if(resultado == 1){
                 printf("\n---SUCESSO NA ALTERAÇÃO---");
             }
@@ -98,12 +101,13 @@ No* pegaDadoQry(No* listaQry, No* lista, char* path, char* pathLog){
         }
         if(strcmp(comando, "delf") == 0){
             fscanf(qry, "%d", &j);
-            resultado = dElem(lista, j);
+            logDelf(*lista, pathLog, j);
+            *lista = delElem(*lista, j);
             printf("\nCaso o elemento %d exista, ele foi deletado.", j);
         }
         if(strcmp(comando, "delf*") == 0){
             fscanf(qry, "%d %d", &j, &k);
-            resultado = dElemN(lista, j, k);
+            dElemN(lista, j, k, pathLog);
             printf("\nTodos os elementos que existam entre %d e %d foram deletados", j, k);
         }
         id++;
@@ -121,17 +125,17 @@ int sobrepoe(No* lista, int j, int k){
     auxJ = buscaElem(lista, j);
     if(auxJ == NULL){
         printf("\nNão é possivel aplicar o algoritmo de sobreposição.\nO Elemento com o ID J não foi encontrato e/ou não existe!\n");
-        return 0;
+        return -1;
     }
     auxK = buscaElem(lista, k);
     if(auxK == NULL){
         printf("\nNão é possivel aplicar o algoritmo de sobreposição.\nO Elemento com o ID K não foi encontrato e/ou não existe!\n");
-        return 0;
+        return -1;
     }
     //Verifica se nenhum dos dos elementos são circulos e/ou retangulos
     if((auxJ->tipo != 'c' && auxJ->tipo != 'r') || (auxK->tipo != 'c' && auxK->tipo != 'r')){
         printf("A verificação de sobreposição só é possível para círculos e retangulos!\n");
-        return 0;
+        return -1;
     }
 
     //retangulo e retangulo
@@ -208,7 +212,7 @@ int contem(No* lista, int j, float x, float y){
     auxJ = buscaElem(lista, j);
     if(auxJ == NULL){
         printf("\nNão é possivel aplicar o algoritmo de intersecção.\nO Elemento com o ID J não foi encontrato e/ou não existe!\n");
-        return 0;
+        return -1;
     }
     if(auxJ->tipo == 'r'){
         float xr = auxJ->fig->r.x;
@@ -271,35 +275,31 @@ int paintN(No* lista, int j, int k, char cb[], char cp[], char* path){
     return 1;
 }
 
-int dElem(No* lista, int j){
-    lista = delElem(lista, j);
-    return 1;
-}
 
-int dElemN(No* lista, int j, int k){
+void dElemN(No** lista, int j, int k, char* path){
     int menor, maior;
     maior = max(j, k);
     menor = min(j, k);
 
     for(int i = menor; i <= maior; i++){
-        dElem(lista, i);
+        logDelf(*lista, path, i);
+        *lista = delElem(*lista, i);
     }
-    return 1;
 }
 
-int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float* h){
+void pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float* h){
     float vX[4], vY[4];
     No* auxJ = NULL;
     No* auxK = NULL;
     auxJ = buscaElem(lista, j);
     if(auxJ == NULL){
         printf("Não foi possivel encontrar o elemento J para extrair coordenadas!");
-        return 0;
+        return;
     }
     auxK = buscaElem(lista, k);
     if(auxJ == NULL){
         printf("Não foi possivel encontrar o elemento K para extrair coordenadas!");
-        return 0;
+        return;
     }
     if(auxJ->tipo == 'r'){
         vX[0] = auxJ->fig->r.x;
@@ -315,7 +315,7 @@ int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float
     }
     if(auxJ->tipo != 'r' && auxJ->tipo != 'c'){
         printf("\nO tipo de elemento do J não é válido! (%c)", auxJ->tipo);
-        return 0;
+        return;
     }
 
     if(auxK->tipo == 'r'){
@@ -332,22 +332,21 @@ int pegaCoordanadas(No* lista, int j, int k, float* x, float* y, float* w, float
     }
     if(auxK->tipo != 'r' && auxK->tipo != 'c'){
         printf("\nO tipo de elemento do K não é válido! (%c)", auxK->tipo);
-        return 0;
+        return;
     }
 
     *x = minV(vX, 4);
     *y = minV(vY, 4);
     *w = maxV(vX, 4) - *x;
     *h = maxV(vY, 4) - *y;
-    return 1;
 }
 
-int pegaCentro(No* lista, int j, float* x, float* y){
+void pegaCentro(No* lista, int j, float* x, float* y){
     No* aux = NULL;
     aux = buscaElem(lista, j);
     if(aux == NULL){
         printf("Não é possivel encontrar o elemento para calcular o centro de massa! (%c)", aux->tipo);
-        return 0;
+        return;
     }
     if(aux->tipo == 'c'){
         *x = aux->fig->c.x;
@@ -359,7 +358,7 @@ int pegaCentro(No* lista, int j, float* x, float* y){
     }
     else{
         printf("O tipo do elemento é inválido! Não é possivel calcular o centro de massa desse elemento!");
-        return 0;
+        return;
     }
-    return 1;
+    return;
 }

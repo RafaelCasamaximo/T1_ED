@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+/*
 void condicionaRetangulo(float* x, float* y, float* w, float* h){
     float xf = *x;
     float yf = *y;
@@ -32,7 +32,7 @@ void condicionaRetangulo(float* x, float* y, float* w, float* h){
         }
     }
 }
-
+*/
 
 float distanciaQuadrada(float x1, float  y1, float  x2, float  y2){
     return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2));
